@@ -1,7 +1,43 @@
-import React from 'react'
-import pdf from "../assets/pawan_resume_v2.pdf";
+import React, {useState} from 'react'
+import pdf from "../assets/pawan_resume_v2_compress.pdf";
 
 function Navigation() {
+   const [menuOpen, setMenuOpen] = useState(false);
+
+   const openMenu = () => {
+      let bars = document.querySelectorAll('.bar');
+      
+      if(!menuOpen){
+         document.querySelector('.hamburger-menu').classList.add('icon');
+         document.querySelector('#navbar').style.display="flex";
+         document.querySelector('#navbar').classList.remove('reverse-nav');
+         document.querySelector('#navbar').classList.add('animate-nav');
+
+         for(let i = 0; i < bars.length; i++){
+            bars[i].style.backgroundColor="var(--white)";
+         }
+
+         setMenuOpen(true);
+      }
+      else{
+         document.querySelector('.hamburger-menu').classList.remove('icon');
+         document.querySelector('#navbar').classList.remove('animate-nav');
+         document.querySelector('#navbar').classList.add('reverse-nav');
+
+         if(window.scrollY <= 0){
+            for(let i = 0; i < bars.length; i++){
+               bars[i].style.backgroundColor="var(--black)";
+            }
+         }
+
+         setTimeout(() => {
+            document.querySelector('#navbar').style.display="none";
+
+         }, 300)
+
+         setMenuOpen(false);
+      }
+   }
 
    window.addEventListener('scroll', () => {
       let navigationSection = document.querySelector('.navigation-section');
@@ -9,11 +45,17 @@ function Navigation() {
       const subMenuItems  = document.querySelectorAll('.sub-menu-item');
       const menu_item_strip1 = document.querySelectorAll('.first-half-strip');
       const menu_item_strip2 = document.querySelectorAll('.second-half-strip');
+      let bars = document.querySelectorAll('.bar');
+      
 
       navigationSection.classList.toggle('sticky-nav', window.scrollY > 0);
       resumeBtn.classList.toggle('updated-resume-block', window.scrollY > 0);
       if(window.scrollY > 0){
          document.querySelector('.logo').style.color="var(--white)";
+
+         for(let i = 0; i < bars.length; i++){
+            bars[i].style.backgroundColor="var(--white)";
+         }
          
          for(let i = 0; i < subMenuItems.length; i++){
             subMenuItems[i].style.color="var(--white)";
@@ -27,7 +69,17 @@ function Navigation() {
 
       }else{
          document.querySelector('.logo').style.color="var(--black)";
-         
+
+         if(!menuOpen){
+            for(let i = 0; i < bars.length; i++){
+               bars[i].style.backgroundColor="var(--black)";
+            }
+         }else{
+            for(let i = 0; i < bars.length; i++){
+               bars[i].style.backgroundColor="var(--white)";
+            }
+         }
+
          for(let j = 0; j < subMenuItems.length; j++){
             subMenuItems[j].style.color="var(--black)";
          }
@@ -62,7 +114,10 @@ function Navigation() {
                <span className='text'>Resume</span>
             </a>
 
-            
+            <div className='hamburger-menu' onClick={openMenu}>
+               <div className='bar bar1'></div>
+               <div className='bar bar2'></div>
+            </div>
          </div>
       </div>
    )
